@@ -6,14 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nazanin1369/reactGit"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "firebase": "^2.4.2",
     "history": "^1.13.1",
     "react": "^0.14.8",
     "react-dom": "^0.14.3",
     "react-router": "^1.0.1",
-    "reactfire": "^0.5.1"
+    "reactfire": "^0.5.1",
+    "webpack": "^1.12.15"
   },
   "devDependencies": {
     "babel-core": "^6.3.13",
