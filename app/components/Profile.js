@@ -8,24 +8,22 @@ var Notes = require('./Notes/Notes')
 
 
 var Profile = React.createClass({
-    misins: [
+    mixins: [
         ReactfireMixin
     ],
     getInitialState(){
         return {
-           // notes: [1, 2, 3],
+            notes: [1, 2, 3],
             bio: {
-                name: 'naz'
+                name: 'nazanin'
             },
             repos: ['a', 'b', 'c']
         }
     },
     componentDidMount: function() {
         this.ref = new Firebase('https://githubnoter.firebaseio.com/');
-        var childref = this.ref.child(this.props.params.username);
-        console.log(this)
-        this.bindAsArray(childref, 'notes');
-
+        var childRef = this.ref.child(this.props.params.username);
+        this.bindAsArray(childRef, 'notes');
     },
     componentWillUnmount: function() {
         this.unbind('notes');
@@ -34,7 +32,7 @@ var Profile = React.createClass({
         return (
             <div className="row">
                 <div className="col-md-4">
-                   <UserProfile username={this.props.params.username} bio={this.state.bio} />
+                   <UserProfile username={this.props.params.username} bio={this.state.bio}/>
                 </div>
                 <div className="col-md-4">
                     <Repos username={this.props.params.username} repos={this.state.repos}/>
