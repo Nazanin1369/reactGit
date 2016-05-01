@@ -4,7 +4,8 @@ var ReactfireMixin = require('reactfire');
 var Firebase = require('firebase');
 var Repos = require('./Github/Repos');
 var UserProfile = require('./Github/UserProfile')
-var Notes = require('./Notes/Notes')
+var Notes = require('./Notes/Notes');
+var helpers = require('../utils/helpers');
 
 
 var Profile = React.createClass({
@@ -14,19 +15,32 @@ var Profile = React.createClass({
     getInitialState(){
         return {
             notes: [1, 2, 3],
-            bio: {
-                name: 'nazanin'
-            },
+            bio: {},
             repos: ['a', 'b', 'c']
         }
     },
     componentDidMount: function() {
         this.ref = new Firebase('https://githubnoter.firebaseio.com/');
-        var childRef = this.ref.child(this.props.params.username);
-        this.bindAsArray(childRef, 'notes');
+        this.init(this.props.params.username);
+    },
+    componentWillReceiveProps: function(nextProps) {
+        this.unbind('notes');
+        this.init(nextProps.params.username);
     },
     componentWillUnmount: function() {
         this.unbind('notes');
+    },
+    init: function(username) {
+        var childRef = this.ref.child(username);
+        this.bindAsArray(childRef, 'notes');
+
+        helpers.getGithubInfo(username)
+            .then(function(data) {
+                this.setState({
+                    bio: data.bio,
+                    repos: data.repos
+                })
+            }.bind(this));
     },
     handleAddNote: function(newNote) {
         this.ref.child(this.props.params.username).child(this.state.notes.length).set(newNote);

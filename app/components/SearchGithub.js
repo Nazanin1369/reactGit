@@ -4,15 +4,12 @@ var Router = require('react-router');
 var SearchGithub = React.createClass({
     mixins: [Router.History],
     getRef: function(ref) {
-        console.log(ref)
         this.usernameRef = ref;
-        console.log(this)
     },
     handleSumbit: function() {
-        console.log('hey');
       var username = this.usernameRef.value;
       this.usernameRef.value = '';
-      this.history.pushState(null, "profile/" + username);
+      this.history.pushState(null, "/profile/" + username);
     },
     render: function() {
         return (
