@@ -24311,8 +24311,8 @@
 
 	var React = __webpack_require__(1);
 	var Main = __webpack_require__(209);
-	var Home = __webpack_require__(210);
-	var Profile = __webpack_require__(211);
+	var Home = __webpack_require__(211);
+	var Profile = __webpack_require__(212);
 	var Router = __webpack_require__(159);
 	var Route = Router.Route;
 	var IndexRoute = Router.IndexRoute;
@@ -24328,29 +24328,30 @@
 /* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var React = __webpack_require__(1);
+	var SearchGithub = __webpack_require__(210);
 
 	var Main = React.createClass({
-	  displayName: "Main",
+	  displayName: 'Main',
 
 	  render: function render() {
 	    return React.createElement(
-	      "div",
-	      { className: "main-container" },
+	      'div',
+	      { className: 'main-container' },
 	      React.createElement(
-	        "nav",
-	        { className: "navbar navbar-default", role: "navigation" },
+	        'nav',
+	        { className: 'navbar navbar-default', role: 'navigation' },
 	        React.createElement(
-	          "div",
-	          { className: "col-sm-7 col-sm-offset-2", style: { marginTop: 15 } },
-	          "MENU"
+	          'div',
+	          { className: 'col-sm-7 col-sm-offset-2', style: { marginTop: 15 } },
+	          React.createElement(SearchGithub, null)
 	        )
 	      ),
 	      React.createElement(
-	        "div",
-	        { className: "container" },
+	        'div',
+	        { className: 'container' },
 	        this.props.children
 	      )
 	    );
@@ -24361,6 +24362,58 @@
 
 /***/ },
 /* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var Router = __webpack_require__(159);
+
+	var SearchGithub = React.createClass({
+	    displayName: 'SearchGithub',
+
+	    mixins: [Router.History],
+	    getRef: function getRef(ref) {
+	        console.log(ref);
+	        this.usernameRef = ref;
+	        console.log(this);
+	    },
+	    handleSumbit: function handleSumbit() {
+	        console.log('hey');
+	        var username = this.usernameRef.value;
+	        this.usernameRef.value = '';
+	        this.history.pushState(null, "profile/" + username);
+	    },
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { className: 'col-sm-12' },
+	            React.createElement(
+	                'form',
+	                { onSubmit: this.handleSumbit },
+	                React.createElement(
+	                    'div',
+	                    { className: 'form-group col-sm-7' },
+	                    React.createElement('input', { type: 'text', className: 'form-control', ref: this.getRef })
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'form-group col-sm-5' },
+	                    React.createElement(
+	                        'button',
+	                        { type: 'submit', className: 'btn btn-block btn-primary' },
+	                        'Search Github'
+	                    )
+	                )
+	            )
+	        );
+	    }
+	});
+
+	module.exports = SearchGithub;
+
+/***/ },
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24382,18 +24435,18 @@
 	module.exports = Home;
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
 	var Router = __webpack_require__(159);
-	var ReactfireMixin = __webpack_require__(212);
-	var Firebase = __webpack_require__(213);
-	var Repos = __webpack_require__(214);
-	var UserProfile = __webpack_require__(215);
-	var Notes = __webpack_require__(216);
+	var ReactfireMixin = __webpack_require__(213);
+	var Firebase = __webpack_require__(214);
+	var Repos = __webpack_require__(215);
+	var UserProfile = __webpack_require__(216);
+	var Notes = __webpack_require__(217);
 
 	var Profile = React.createClass({
 	    displayName: 'Profile',
@@ -24417,6 +24470,9 @@
 	    componentWillUnmount: function componentWillUnmount() {
 	        this.unbind('notes');
 	    },
+	    handleAddNote: function handleAddNote(newNote) {
+	        this.ref.child(this.props.params.username).child(this.state.notes.length).set(newNote);
+	    },
 	    render: function render() {
 	        return React.createElement(
 	            'div',
@@ -24434,7 +24490,10 @@
 	            React.createElement(
 	                'div',
 	                { className: 'col-md-4' },
-	                React.createElement(Notes, { username: this.props.params.username, notes: this.state.notes })
+	                React.createElement(Notes, {
+	                    username: this.props.params.username,
+	                    notes: this.state.notes,
+	                    addNote: this.handleAddNote })
 	            )
 	        );
 	    }
@@ -24443,7 +24502,7 @@
 	module.exports = Profile;
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -24814,7 +24873,7 @@
 
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports) {
 
 	/*! @license Firebase v2.4.2
@@ -25100,7 +25159,7 @@
 
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25137,7 +25196,7 @@
 	module.exports = Repos;
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25182,20 +25241,22 @@
 	module.exports = UserProfile;
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var NotesList = __webpack_require__(217);
+	var NotesList = __webpack_require__(218);
+	var AddNote = __webpack_require__(219);
 
 	var Notes = React.createClass({
 	    displayName: 'Notes',
 
 	    propTypes: {
 	        username: React.PropTypes.string.isRequired,
-	        notes: React.PropTypes.array.isRequired
+	        notes: React.PropTypes.array.isRequired,
+	        addNote: React.PropTypes.func.isRequired
 	    },
 	    render: function render() {
 	        return React.createElement(
@@ -25208,6 +25269,7 @@
 	                this.props.username,
 	                ' '
 	            ),
+	            React.createElement(AddNote, { username: this.props.username, addNote: this.props.addNote }),
 	            React.createElement(NotesList, { notes: this.props.notes })
 	        );
 	    }
@@ -25216,7 +25278,7 @@
 	module.exports = Notes;
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25246,6 +25308,50 @@
 	});
 
 	module.exports = NodeList;
+
+/***/ },
+/* 219 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var AddNote = React.createClass({
+	    displayName: 'AddNote',
+
+	    propTypes: {
+	        username: React.PropTypes.string.isRequired,
+	        addNote: React.PropTypes.func.isRequired
+	    },
+	    setRef: function setRef(ref) {
+	        this.note = ref;
+	    },
+	    handleSubmit: function handleSubmit() {
+	        var newNote = this.note.value;
+	        this.note.value = '';
+	        this.props.addNote(newNote);
+	    },
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { className: 'input-group' },
+	            React.createElement('input', { type: 'text', className: 'form-control',
+	                placeholder: 'Add New Note', ref: this.setRef }),
+	            React.createElement(
+	                'span',
+	                { className: 'input-group-btn' },
+	                React.createElement(
+	                    'button',
+	                    { className: 'btn btn-default', type: 'button', onClick: this.handleSubmit },
+	                    'Submit'
+	                )
+	            )
+	        );
+	    }
+	});
+
+	module.exports = AddNote;
 
 /***/ }
 /******/ ]);
